@@ -1,58 +1,1091 @@
 ﻿<!DOCTYPE html>
 <html>
 <head>
-    <title>LegoBLOX</title>
+    <meta charset="UTF-8">
+    <title>FREDDY FAZBEAR'S PIZZA - Security Office</title>
     <style>
-        body { 
-            font-family: Arial, sans-serif; 
+        @import url('https://fonts.googleapis.com/css2?family=Creepster&family=Orbitron:wght@400;700;900&display=swap');
+        
+        * {
             margin: 0;
             padding: 0;
-            height: 100vh;
-            width: 100vw;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Orbitron', sans-serif;
+            background: #0a0a0f;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+        
+        /* Neon Grid Background */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                linear-gradient(90deg, rgba(255, 0, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(rgba(0, 255, 255, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            animation: gridMove 20s linear infinite;
+            z-index: -1;
+        }
+        
+        @keyframes gridMove {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(50px, 50px); }
+        }
+        
+        /* Main Title */
+        .main-title {
+            text-align: center;
+            padding: 30px 20px;
+            position: relative;
+        }
+        
+        .main-title h1 {
+            font-family: 'Creepster', cursive;
+            font-size: clamp(2rem, 8vw, 5rem);
+            color: #fff;
+            text-shadow: 
+                0 0 10px #ff00ff,
+                0 0 20px #ff00ff,
+                0 0 40px #ff00ff,
+                0 0 80px #ff00ff,
+                0 0 120px #ff00ff;
+            letter-spacing: 5px;
+            animation: titleGlow 2s ease-in-out infinite alternate;
+        }
+        
+        .main-title .subtitle {
+            font-size: clamp(0.8rem, 2vw, 1.2rem);
+            color: #00ffff;
+            text-shadow: 
+                0 0 5px #00ffff,
+                0 0 10px #00ffff,
+                0 0 20px #00ffff;
+            margin-top: 10px;
+            letter-spacing: 3px;
+        }
+        
+        @keyframes titleGlow {
+            0% { text-shadow: 0 0 10px #ff00ff, 0 0 20px #ff00ff, 0 0 40px #ff00ff; }
+            100% { text-shadow: 0 0 20px #ff00ff, 0 0 40px #ff00ff, 0 0 80px #ff00ff, 0 0 120px #ff00ff; }
+        }
+        
+        /* Security Office Container */
+        .office-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            padding: 20px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        /* Neon Panel Style */
+        .neon-panel {
+            background: rgba(10, 10, 20, 0.9);
+            border: 3px solid;
+            border-radius: 15px;
+            padding: 20px;
             position: relative;
             overflow: hidden;
         }
-        h1 { 
-            color: white;
-            font-size: 80px;
-            text-align: center;
-            text-shadow: 3px 3px 6px rgba(0,0,0,0.5);
-            margin: 0;
-            position: absolute;
-            top: 20px;
-            z-index: 10;
+        
+        .neon-panel.pink {
+            border-color: #ff00ff;
+            box-shadow: 
+                0 0 10px #ff00ff,
+                0 0 20px rgba(255, 0, 255, 0.5),
+                inset 0 0 30px rgba(255, 0, 255, 0.1);
         }
-        .video-container {
-            width: 100vw;
-            height: 100vh;
+        
+        .neon-panel.cyan {
+            border-color: #00ffff;
+            box-shadow: 
+                0 0 10px #00ffff,
+                0 0 20px rgba(0, 255, 255, 0.5),
+                inset 0 0 30px rgba(0, 255, 255, 0.1);
+        }
+        
+        .neon-panel.yellow {
+            border-color: #ffff00;
+            box-shadow: 
+                0 0 10px #ffff00,
+                0 0 20px rgba(255, 255, 0, 0.5),
+                inset 0 0 30px rgba(255, 255, 0, 0.1);
+        }
+        
+        .neon-panel.red {
+            border-color: #ff0040;
+            box-shadow: 
+                0 0 10px #ff0040,
+                0 0 20px rgba(255, 0, 64, 0.5),
+                inset 0 0 30px rgba(255, 0, 64, 0.1);
+        }
+        
+        /* Panel Titles */
+        .panel-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid currentColor;
+            letter-spacing: 2px;
+        }
+        
+        .pink .panel-title { 
+            color: #ff00ff; 
+            text-shadow: 0 0 10px #ff00ff;
+        }
+        .cyan .panel-title { 
+            color: #00ffff; 
+            text-shadow: 0 0 10px #00ffff;
+        }
+        .yellow .panel-title { 
+            color: #ffff00; 
+            text-shadow: 0 0 10px #ffff00;
+        }
+        .red .panel-title { 
+            color: #ff0040; 
+            text-shadow: 0 0 10px #ff0040;
+        }
+        
+        /* Camera Feed */
+        .camera-feed {
+            background: #000;
+            border: 2px solid #ff00ff;
+            border-radius: 10px;
+            height: 200px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        /* Scanlines Effect */
+        .camera-feed::before {
+            content: '';
             position: absolute;
             top: 0;
             left: 0;
-        }
-        iframe {
             width: 100%;
             height: 100%;
-            border: none;
+            background: repeating-linear-gradient(
+                0deg,
+                rgba(255, 0, 255, 0.03) 0px,
+                rgba(255, 0, 255, 0.03) 1px,
+                transparent 1px,
+                transparent 3px
+            );
+            pointer-events: none;
+            animation: scanlines 0.1s linear infinite;
+            z-index: 10;
+        }
+        
+        @keyframes scanlines {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(3px); }
+        }
+        
+        /* Static Effect */
+        .camera-feed::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+            opacity: 0.05;
+            pointer-events: none;
+            animation: static 0.2s infinite;
+        }
+        
+        @keyframes static {
+            0%, 100% { opacity: 0.05; }
+            50% { opacity: 0.08; }
+        }
+        
+        /* Freddy Animatronic */
+        .freddy {
+            position: relative;
+            z-index: 5;
+            animation: eerieMove 4s ease-in-out infinite;
+        }
+        
+        .freddy-head {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #8B4513 0%, #654321 100%);
+            border-radius: 50%;
+            position: relative;
+            box-shadow: 
+                0 0 20px rgba(255, 0, 255, 0.5),
+                inset 0 -10px 20px rgba(0, 0, 0, 0.5);
+            border: 2px solid #ff00ff;
+        }
+        
+        .freddy-ear {
+            width: 25px;
+            height: 25px;
+            background: #8B4513;
+            border-radius: 50%;
+            position: absolute;
+            top: -5px;
+            border: 2px solid #ff00ff;
+            box-shadow: 0 0 10px rgba(255, 0, 255, 0.5);
+        }
+        
+        .freddy-ear.left { left: -5px; }
+        .freddy-ear.right { right: -5px; }
+        
+        .freddy-eye {
+            width: 20px;
+            height: 20px;
+            background: #000;
+            border-radius: 50%;
+            position: absolute;
+            top: 25px;
+            border: 2px solid #00ffff;
+            box-shadow: 0 0 10px #00ffff;
+        }
+        
+        .freddy-eye.left { left: 12px; }
+        .freddy-eye.right { right: 12px; }
+        
+        .freddy-eye::after {
+            content: '';
+            width: 8px;
+            height: 8px;
+            background: #ff0040;
+            border-radius: 50%;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            box-shadow: 0 0 15px #ff0040, 0 0 30px #ff0040;
+            animation: eyeGlow 1s ease-in-out infinite alternate;
+        }
+        
+        @keyframes eyeGlow {
+            0% { box-shadow: 0 0 10px #ff0040; }
+            100% { box-shadow: 0 0 20px #ff0040, 0 0 40px #ff0040; }
+        }
+        
+        .freddy-nose {
+            width: 15px;
+            height: 12px;
+            background: #000;
+            border-radius: 50%;
+            position: absolute;
+            bottom: 22px;
+            left: 50%;
+            transform: translateX(-50%);
+            border: 2px solid #ff00ff;
+        }
+        
+        .freddy-mouth {
+            width: 40px;
+            height: 15px;
+            background: #000;
+            position: absolute;
+            bottom: 5px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-radius: 0 0 20px 20px;
+            border: 2px solid #ff0040;
+            box-shadow: 0 0 10px #ff0040;
+        }
+        
+        @keyframes eerieMove {
+            0%, 100% { transform: translateX(0) rotate(0deg); }
+            25% { transform: translateX(-5px) rotate(-2deg); }
+            75% { transform: translateX(5px) rotate(2deg); }
+        }
+        
+        .camera-label {
+            position: absolute;
+            bottom: 10px;
+            left: 10px;
+            color: #ff00ff;
+            font-size: 0.8rem;
+            text-shadow: 0 0 5px #ff00ff;
+            z-index: 20;
+        }
+        
+        .rec-indicator {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            color: #ff0040;
+            font-size: 0.8rem;
+            z-index: 20;
+        }
+        
+        .rec-dot {
+            width: 10px;
+            height: 10px;
+            background: #ff0040;
+            border-radius: 50%;
+            animation: recBlink 1s infinite;
+            box-shadow: 0 0 10px #ff0040;
+        }
+        
+        @keyframes recBlink {
+            0%, 49% { opacity: 1; }
+            50%, 100% { opacity: 0; }
+        }
+        
+        /* Night Timer */
+        .time-display {
+            font-size: 3rem;
+            font-weight: 900;
+            text-align: center;
+            color: #00ffff;
+            text-shadow: 
+                0 0 10px #00ffff,
+                0 0 20px #00ffff,
+                0 0 40px #00ffff;
+            margin: 20px 0;
+        }
+        
+        .night-label {
+            text-align: center;
+            color: #00ffff;
+            font-size: 1rem;
+            text-shadow: 0 0 5px #00ffff;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        
+        /* Power Meter */
+        .power-container {
+            margin: 15px 0;
+        }
+        
+        .power-label {
+            color: #ffff00;
+            font-size: 0.9rem;
+            margin-bottom: 10px;
+            text-shadow: 0 0 5px #ffff00;
+        }
+        
+        .power-bar-bg {
+            width: 100%;
+            height: 30px;
+            background: #111;
+            border: 2px solid #ffff00;
+            border-radius: 5px;
+            overflow: hidden;
+            box-shadow: 0 0 10px rgba(255, 255, 0, 0.3);
+        }
+        
+        .power-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #ff0040, #ffff00, #00ff00);
+            width: 65%;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding-right: 10px;
+            font-weight: bold;
+            color: #000;
+            font-size: 0.9rem;
+            animation: powerFlicker 3s infinite;
+            box-shadow: 0 0 20px rgba(255, 255, 0, 0.5);
+        }
+        
+        @keyframes powerFlicker {
+            0%, 95%, 100% { opacity: 1; }
+            96%, 98% { opacity: 0.8; }
+        }
+        
+        .power-warning {
+            color: #ff0040;
+            font-size: 0.9rem;
+            text-align: center;
+            margin-top: 15px;
+            animation: warningBlink 0.5s infinite;
+            text-shadow: 0 0 10px #ff0040;
+        }
+        
+        @keyframes warningBlink {
+            0%, 49% { opacity: 1; }
+            50%, 100% { opacity: 0.3; }
+        }
+        
+        /* Door Controls */
+        .door-controls {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 15px;
+        }
+        
+        .door-btn {
+            padding: 15px;
+            border: 3px solid;
+            border-radius: 10px;
+            background: rgba(0, 0, 0, 0.5);
+            cursor: pointer;
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 700;
+            font-size: 0.9rem;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        
+        .door-btn.closed {
+            border-color: #00ff00;
+            color: #00ff00;
+            box-shadow: 0 0 15px rgba(0, 255, 0, 0.5);
+        }
+        
+        .door-btn.open {
+            border-color: #ff0040;
+            color: #ff0040;
+            box-shadow: 0 0 15px rgba(255, 0, 64, 0.5);
+        }
+        
+        .door-btn:hover {
+            transform: scale(1.05);
+        }
+        
+        .door-status-text {
+            font-size: 0.7rem;
+            margin-top: 5px;
+            opacity: 0.8;
+        }
+        
+        /* Animatronic Status */
+        .animatronic-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .animatronic-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid #ff0040;
+            border-radius: 5px;
+        }
+        
+        .animatronic-name {
+            color: #fff;
+            font-size: 0.9rem;
+            text-shadow: 0 0 5px #ff0040;
+        }
+        
+        .animatronic-location {
+            color: #ff0040;
+            font-size: 0.8rem;
+            text-shadow: 0 0 5px #ff0040;
+        }
+        
+        /* Footer Message */
+        .footer-message {
+            text-align: center;
+            padding: 30px;
+            color: #ff00ff;
+            font-size: 1.2rem;
+            text-shadow: 0 0 10px #ff00ff;
+            animation: footerGlow 3s ease-in-out infinite alternate;
+        }
+        
+        @keyframes footerGlow {
+            0% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+        
+        /* Neon flicker effect on random elements */
+        .flicker {
+            animation: neonFlicker 5s infinite;
+        }
+        
+        @keyframes neonFlicker {
+            0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% { opacity: 1; }
+            20%, 24%, 55% { opacity: 0.4; }
+        }
+        
+        /* Floating particles */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+        
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: #ff00ff;
+            border-radius: 50%;
+            box-shadow: 0 0 10px #ff00ff;
+            animation: float 15s infinite linear;
+        }
+        
+        @keyframes float {
+            0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(-100vh) rotate(720deg); opacity: 0; }
         }
     </style>
 </head>
 <body>
-    <h1>you just got rick rolled</h1>
-    <div class="video-container">
-        <iframe id="ytplayer" src="https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1&mute=1" allowfullscreen></iframe>
+    <!-- Floating Particles -->
+    <div class="particles">
+        <div class="particle" style="left: 10%; animation-delay: 0s; background: #ff00ff;"></div>
+        <div class="particle" style="left: 20%; animation-delay: 2s; background: #00ffff;"></div>
+        <div class="particle" style="left: 30%; animation-delay: 4s; background: #ffff00;"></div>
+        <div class="particle" style="left: 40%; animation-delay: 1s; background: #ff0040;"></div>
+        <div class="particle" style="left: 50%; animation-delay: 3s; background: #ff00ff;"></div>
+        <div class="particle" style="left: 60%; animation-delay: 5s; background: #00ffff;"></div>
+        <div class="particle" style="left: 70%; animation-delay: 2.5s; background: #ffff00;"></div>
+        <div class="particle" style="left: 80%; animation-delay: 4.5s; background: #ff00ff;"></div>
+        <div class="particle" style="left: 90%; animation-delay: 1.5s; background: #00ffff;"></div>
     </div>
+
+    <!-- Main Title -->
+    <div class="main-title">
+        <h1 class="flicker">FREDDY FAZBEAR'S PIZZA</h1>
+        <div class="subtitle">/// SECURITY OFFICE TERMINAL ///</div>
+    </div>
+    
+    <!-- Security Office Panels -->
+    <div class="office-container">
+        <!-- Camera Feed Panel -->
+        <div class="neon-panel pink">
+            <div class="panel-title">CAM 1A - SHOW STAGE</div>
+            <div class="camera-feed">
+                <div class="rec-indicator">
+                    <div class="rec-dot"></div>
+                    <span>REC</span>
+                </div>
+                <div class="freddy">
+                    <div class="freddy-head">
+                        <div class="freddy-ear left"></div>
+                        <div class="freddy-ear right"></div>
+                        <div class="freddy-eye left"></div>
+                        <div class="freddy-eye right"></div>
+                        <div class="freddy-nose"></div>
+                        <div class="freddy-mouth"></div>
+                    </div>
+                </div>
+                <div class="camera-label">SHOW STAGE</div>
+            </div>
+        </div>
+        
+        <!-- Night Timer Panel -->
+        <div class="neon-panel cyan">
+            <div class="panel-title">NIGHT SHIFT</div>
+            <div class="time-display" id="nightTime">12:00 AM</div>
+            <div class="night-label">NIGHT 5 • SURVIVE UNTIL 6 AM</div>
+        </div>
+        
+        <!-- Power System Panel -->
+        <div class="neon-panel yellow">
+            <div class="panel-title">POWER SYSTEM</div>
+            <div class="power-container">
+                <div class="power-label">REMAINING POWER</div>
+                <div class="power-bar-bg">
+                    <div class="power-bar-fill" id="powerBar">65%</div>
+                </div>
+            </div>
+            <div class="power-warning">⚠ CONSERVE POWER ⚠</div>
+        </div>
+        
+        <!-- Door Controls Panel -->
+        <div class="neon-panel pink">
+            <div class="panel-title">DOOR CONTROLS</div>
+            <div class="door-controls">
+                <div class="door-btn closed" id="leftDoor" onclick="toggleDoor('left')">
+                    LEFT DOOR
+                    <div class="door-status-text">SECURED</div>
+                </div>
+                <div class="door-btn closed" id="rightDoor" onclick="toggleDoor('right')">
+                    RIGHT DOOR
+                    <div class="door-status-text">SECURED</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Animatronic Tracker -->
+        <div class="neon-panel red">
+            <div class="panel-title">ANIMATRONIC STATUS</div>
+            <div class="animatronic-list">
+                <div class="animatronic-item">
+                    <span class="animatronic-name">🐻 FREDDY FAZBEAR</span>
+                    <span class="animatronic-location" id="freddyLoc">SHOW STAGE</span>
+                </div>
+                <div class="animatronic-item">
+                    <span class="animatronic-name">🐰 BONNIE</span>
+                    <span class="animatronic-location" id="bonnieLoc">BACKSTAGE</span>
+                </div>
+                <div class="animatronic-item">
+                    <span class="animatronic-name">🐥 CHICA</span>
+                    <span class="animatronic-location" id="chicaLoc">DINING AREA</span>
+                </div>
+                <div class="animatronic-item">
+                    <span class="animatronic-name">🦊 FOXY</span>
+                    <span class="animatronic-location" id="foxyLoc">PIRATE COVE</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Camera Grid Panel -->
+        <div class="neon-panel cyan">
+            <div class="panel-title">CAM 4B - KITCHEN</div>
+            <div class="camera-feed" style="border-color: #00ffff;">
+                <div class="rec-indicator">
+                    <div class="rec-dot"></div>
+                    <span>REC</span>
+                </div>
+                <div style="color: #00ffff; text-shadow: 0 0 10px #00ffff; font-size: 1.5rem; z-index: 5;">
+                    🔊 AUDIO ONLY
+                </div>
+                <div class="camera-label" style="color: #00ffff;">KITCHEN</div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Footer Message -->
+    <div class="footer-message">
+        "IT'S ME" - DON'T FORGET TO CHECK THE CAMERAS
+    </div>
+    
     <script>
-        // Attempt to unmute after user interaction
-        document.addEventListener('click', function() {
-            const iframe = document.getElementById('ytplayer');
-            if (iframe) {
-                iframe.src = 'https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1';
+        /* =========================================================================
+           FNAF SECURITY OFFICE - JAVASCRIPT (Frontend Code)
+           =========================================================================
+           
+           This JavaScript runs in the USER'S BROWSER (not on the server).
+           It handles:
+           - What happens when buttons are clicked
+           - Updating the display
+           - Talking to the Lua server (backend)
+           
+           The flow is:
+           1. User clicks a button
+           2. JavaScript sends a request to the server (API call)
+           3. Lua code on the server processes it
+           4. Server sends back data (JSON)
+           5. JavaScript updates the page with the new data
+           
+        ========================================================================= */
+
+
+        /* -------------------------------------------------------------------------
+           GLOBAL VARIABLES
+           -------------------------------------------------------------------------
+           These variables store the current state of the game.
+           "let" means the variable can change later.
+           "const" means it cannot change (constant).
+        ------------------------------------------------------------------------- */
+        
+        let currentHour = 12;      // Current in-game hour (starts at midnight)
+        let currentMinute = 0;     // Current in-game minute
+        let power = 65;            // Power percentage (we'll sync this with server)
+        
+        // All possible locations where animatronics can be
+        const locations = [
+            'SHOW STAGE', 
+            'BACKSTAGE', 
+            'DINING AREA', 
+            'RESTROOMS', 
+            'KITCHEN', 
+            'EAST HALL', 
+            'WEST HALL', 
+            'SUPPLY CLOSET', 
+            'PIRATE COVE', 
+            'OFFICE DOOR'  // <- When they're here, you're in danger!
+        ];
+
+
+        /* -------------------------------------------------------------------------
+           FUNCTION: Toggle Door (Called when door button is clicked)
+           -------------------------------------------------------------------------
+           
+           This is the main function that runs when you click a door button.
+           
+           WHAT IT DOES:
+           1. Sends a request to the Lua server: /api/door?side=left (or right)
+           2. The server toggles the door state and sends back the new status
+           3. We update the button appearance based on the response
+           4. We also update the power bar with the new power level
+           
+           PARAMETER:
+           - side: "left" or "right" - which door was clicked
+           
+        ------------------------------------------------------------------------- */
+        async function toggleDoor(side) {
+            /*
+                "async" means this function can WAIT for things.
+                When we call the server, it takes time to respond.
+                "async" lets us wait without freezing the page.
+            */
+            
+            // Get the button element from the HTML using its ID
+            // The button ID is "leftDoor" or "rightDoor"
+            const door = document.getElementById(side + 'Door');
+            
+            /* 
+                TRY/CATCH: This is error handling.
+                - TRY: Attempt to do something that might fail
+                - CATCH: If it fails, handle the error gracefully
+            */
+            try {
+                /*
+                    FETCH is how JavaScript talks to servers!
+                    
+                    We're calling our Lua API: /api/door?side=left
+                    - /api/door is the URL (defined in nginx.conf)
+                    - ?side=left is a "query parameter" (extra info in the URL)
+                    
+                    "await" means "wait for this to finish before continuing"
+                */
+                const response = await fetch('/api/door?side=' + side);
+                
+                /*
+                    The server sends back JSON (like: {"success": true, "is_closed": false})
+                    We need to PARSE it to turn the text into a JavaScript object.
+                    
+                    response.json() does that parsing for us.
+                */
+                const data = await response.json();
+                
+                /*
+                    Now "data" is an object with all the info from the server!
+                    We can access properties like:
+                    - data.is_closed (true or false)
+                    - data.power_remaining (number)
+                    - data.animatronic_blocked (true or false)
+                */
+                
+                // Update the button appearance based on door state
+                if (data.is_closed) {
+                    // Door is CLOSED (secured)
+                    door.classList.remove('open');       // Remove "open" styling
+                    door.classList.add('closed');        // Add "closed" styling
+                    door.querySelector('.door-status-text').textContent = 'SECURED';
+                } else {
+                    // Door is OPEN
+                    door.classList.remove('closed');
+                    door.classList.add('open');
+                    door.querySelector('.door-status-text').textContent = 'OPEN';
+                }
+                
+                // Update the power bar with the new power level from the server
+                power = data.power_remaining;
+                updatePowerDisplay(power);
+                
+                /*
+                    BONUS: Show a message if an animatronic was blocked!
+                    This only happens ~30% of the time when closing a door.
+                */
+                if (data.animatronic_blocked) {
+                    // Flash the door red briefly to show something was blocked
+                    door.style.boxShadow = '0 0 30px #ff0040, 0 0 60px #ff0040';
+                    
+                    // After 500ms (0.5 seconds), return to normal
+                    setTimeout(() => {
+                        door.style.boxShadow = '';  // Remove the special effect
+                    }, 500);
+                    
+                    // Log to console (press F12 to see developer console)
+                    console.log('🚫 Animatronic blocked! Total blocked: ' + data.total_blocked);
+                }
+                
+                // Log the full response to console for debugging
+                console.log('Door response:', data);
+                
+            } catch (error) {
+                /*
+                    If something goes wrong (server offline, network error, etc.)
+                    we end up here. We'll just toggle the door visually anyway
+                    so the user doesn't feel like the button is broken.
+                */
+                console.error('Failed to contact server:', error);
+                
+                // Fallback: Toggle door visually even if server is down
+                if (door.classList.contains('closed')) {
+                    door.classList.remove('closed');
+                    door.classList.add('open');
+                    door.querySelector('.door-status-text').textContent = 'OPEN';
+                } else {
+                    door.classList.remove('open');
+                    door.classList.add('closed');
+                    door.querySelector('.door-status-text').textContent = 'SECURED';
+                }
             }
-        }, { once: true });
+        }
+
+
+        /* -------------------------------------------------------------------------
+           FUNCTION: Update Power Display
+           -------------------------------------------------------------------------
+           
+           Updates the power bar visual to match the current power level.
+           Changes color to red when power is low!
+           
+           PARAMETER:
+           - powerLevel: A number from 0 to 100
+           
+        ------------------------------------------------------------------------- */
+        function updatePowerDisplay(powerLevel) {
+            // Find the power bar element in the HTML
+            const powerBar = document.getElementById('powerBar');
+            
+            // Set the width to match the power percentage
+            // e.g., 65% power = 65% width
+            powerBar.style.width = powerLevel + '%';
+            
+            // Update the text inside the bar
+            // Math.floor() rounds down: 65.7 becomes 65
+            powerBar.textContent = Math.floor(powerLevel) + '%';
+            
+            // Change color based on power level
+            if (powerLevel < 20) {
+                // CRITICAL: Red color when under 20%
+                powerBar.style.background = 'linear-gradient(90deg, #ff0040, #ff0040)';
+            } else if (powerLevel < 40) {
+                // WARNING: Orange color when under 40%
+                powerBar.style.background = 'linear-gradient(90deg, #ff8800, #ff4400)';
+            } else {
+                // NORMAL: Cyan/teal color
+                powerBar.style.background = 'linear-gradient(90deg, #00ffff, #00cccc)';
+            }
+        }
+
+
+        /* -------------------------------------------------------------------------
+           FUNCTION: Sync Power with Server
+           -------------------------------------------------------------------------
+           
+           Calls the Lua /api/power endpoint to get the real power level.
+           This keeps the browser in sync with the server's game state.
+           
+        ------------------------------------------------------------------------- */
+        async function syncPower() {
+            try {
+                // Call the power API
+                const response = await fetch('/api/power');
+                const data = await response.json();
+                
+                // Update our local power variable and display
+                power = data.power_remaining;
+                updatePowerDisplay(power);
+                
+                // Check for game over!
+                if (data.game_over) {
+                    console.log('💀 GAME OVER - Power depleted!');
+                    // You could show a game over screen here!
+                }
+                
+            } catch (error) {
+                // Server might be down, just continue with local simulation
+                console.error('Could not sync power:', error);
+            }
+        }
+
+
+        /* -------------------------------------------------------------------------
+           FUNCTION: Update Time Display
+           -------------------------------------------------------------------------
+           
+           Simulates time passing in the game.
+           In FNAF, the night goes from 12:00 AM to 6:00 AM.
+           
+           This is a LOCAL simulation - it doesn't talk to the server.
+           
+        ------------------------------------------------------------------------- */
+        function updateTime() {
+            // Add random minutes (5 to 15)
+            // Math.random() gives 0 to 1, we scale and add to get 5 to 15
+            currentMinute += Math.floor(Math.random() * 10) + 5;
+            
+            // If minutes go over 60, add an hour
+            if (currentMinute >= 60) {
+                currentMinute = 0;  // Reset minutes
+                currentHour++;      // Add an hour
+                
+                // If hour goes past 12, wrap back to 1
+                if (currentHour > 12) currentHour = 1;
+            }
+            
+            // Format the time display
+            // padStart(2, '0') adds a leading zero: 5 becomes "05"
+            const displayMinute = String(currentMinute).padStart(2, '0');
+            
+            // Update the HTML element
+            document.getElementById('nightTime').textContent = 
+                `${currentHour}:${displayMinute} AM`;
+        }
+        
+        
+        /* -------------------------------------------------------------------------
+           FUNCTION: Update Power (Local Simulation)
+           -------------------------------------------------------------------------
+           
+           Slowly drains power over time.
+           We also sync with the server periodically.
+           
+        ------------------------------------------------------------------------- */
+        function updatePower() {
+            // Decrease power slightly each tick
+            // This is just for visual smoothness between server syncs
+            power -= Math.random() * 0.5;
+            
+            // Don't go below 0
+            if (power < 0) power = 0;
+            
+            // Update the display
+            updatePowerDisplay(power);
+            
+            // Every 5 calls, sync with server for real power level
+            // This keeps us accurate with the backend
+            if (Math.random() > 0.8) {
+                syncPower();
+            }
+        }
+
+        
+        /* -------------------------------------------------------------------------
+           FUNCTION: Move Animatronics
+           -------------------------------------------------------------------------
+           
+           Randomly moves the animatronics around the map.
+           Each animatronic has a different chance of moving.
+           
+           - Bonnie: 30% chance to move (moves often)
+           - Chica: 20% chance to move
+           - Freddy: 10% chance to move (rarely moves)
+           
+        ------------------------------------------------------------------------- */
+        function moveAnimatronics() {
+            // Math.random() gives 0 to 1
+            // If it's > 0.7, that's a 30% chance
+            
+            if (Math.random() > 0.7) {
+                // Move Bonnie to a random location
+                const newLocation = locations[Math.floor(Math.random() * locations.length)];
+                document.getElementById('bonnieLoc').textContent = newLocation;
+            }
+            
+            if (Math.random() > 0.8) {
+                // Move Chica (20% chance)
+                const newLocation = locations[Math.floor(Math.random() * locations.length)];
+                document.getElementById('chicaLoc').textContent = newLocation;
+            }
+            
+            if (Math.random() > 0.9) {
+                // Move Freddy (10% chance - he's slow!)
+                const newLocation = locations[Math.floor(Math.random() * locations.length)];
+                document.getElementById('freddyLoc').textContent = newLocation;
+            }
+        }
+
+
+        /* -------------------------------------------------------------------------
+           FUNCTION: Reset Game
+           -------------------------------------------------------------------------
+           
+           Calls the server to reset power and door states.
+           Like starting a new night!
+           
+        ------------------------------------------------------------------------- */
+        async function resetGame() {
+            try {
+                const response = await fetch('/api/reset');
+                const data = await response.json();
+                
+                if (data.success) {
+                    console.log('🌙 New night started!');
+                    power = data.power;
+                    updatePowerDisplay(power);
+                    
+                    // Reset door visuals
+                    ['left', 'right'].forEach(side => {
+                        const door = document.getElementById(side + 'Door');
+                        door.classList.remove('open');
+                        door.classList.add('closed');
+                        door.querySelector('.door-status-text').textContent = 'SECURED';
+                    });
+                }
+            } catch (error) {
+                console.error('Could not reset game:', error);
+            }
+        }
+
+
+        /* -------------------------------------------------------------------------
+           START THE SIMULATIONS
+           -------------------------------------------------------------------------
+           
+           setInterval() runs a function repeatedly at set intervals.
+           The second parameter is milliseconds:
+           - 1000ms = 1 second
+           - 2000ms = 2 seconds
+           - etc.
+           
+        ------------------------------------------------------------------------- */
+        
+        // Update time every 3 seconds
+        setInterval(updateTime, 3000);
+        
+        // Update power every 2 seconds
+        setInterval(updatePower, 2000);
+        
+        // Move animatronics every 4 seconds
+        setInterval(moveAnimatronics, 4000);
+        
+        // Sync power with server every 10 seconds
+        setInterval(syncPower, 10000);
+        
+        // Initial sync when page loads
+        syncPower();
+
+
+        /* -------------------------------------------------------------------------
+           CONSOLE TIPS FOR DEBUGGING
+           -------------------------------------------------------------------------
+           
+           Press F12 to open Developer Tools in your browser.
+           Go to the "Console" tab to see logs.
+           
+           You can type these commands to test the API:
+           
+           fetch('/api/door?side=left').then(r => r.json()).then(console.log)
+           fetch('/api/power').then(r => r.json()).then(console.log)
+           fetch('/api/animatronics').then(r => r.json()).then(console.log)
+           fetch('/api/reset').then(r => r.json()).then(console.log)
+           
+        ------------------------------------------------------------------------- */
     </script>
 </body>
 </html>

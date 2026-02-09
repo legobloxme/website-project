@@ -45,25 +45,79 @@ resource "aws_cloudfront_distribution" "site" {
   wait_for_deployment = false
   aliases             = ["legoblox.me", "www.legoblox.me"]
 
+  # EC2 OpenResty/Lua server as the origin (instead of S3)
+  # CloudFront requires a domain name, not an IP - use EC2 public DNS
   origin {
-    domain_name              = aws_s3_bucket.site.bucket_regional_domain_name
-    origin_id                = "s3-legoblox-me-website"
-    origin_access_control_id = aws_cloudfront_origin_access_control.site.id
+    domain_name = aws_instance.openresty.public_dns
+    origin_id   = "ec2-openresty-lua"
+
+    custom_origin_config {
+      http_port              = 80
+      https_port             = 443
+      origin_protocol_policy = "http-only"  # EC2 only has HTTP
+      origin_ssl_protocols   = ["TLSv1.2"]
+    }
   }
 
   default_cache_behavior {
+    allowed_methods        = ["DELETE", "GET", "HEAD", "OPTIONS", "PATCH", "POST", "PUT"]
+    cached_methods         = ["GET", "HEAD"]
+    target_origin_id       = "ec2-openresty-lua"
+    viewer_protocol_policy = "redirect-to-https"
+
+    # Forward query strings for API calls like /api/door?side=left
+    forwarded_values {
+      query_string = true
+      headers      = ["Host", "Origin", "Access-Control-Request-Headers", "Access-Control-Request-Method"]
+
+      cookies {
+        forward = "all"
+      }
+    }
+
+    # Short cache for dynamic Lua content
+    min_ttl     = 0
+    default_ttl = 0
+    max_ttl     = 60
+  }
+
+  # Cache static assets longer
+  ordered_cache_behavior {
+    path_pattern           = "*.css"
     allowed_methods        = ["GET", "HEAD"]
     cached_methods         = ["GET", "HEAD"]
-    target_origin_id       = "s3-legoblox-me-website"
+    target_origin_id       = "ec2-openresty-lua"
     viewer_protocol_policy = "redirect-to-https"
 
     forwarded_values {
       query_string = false
-
       cookies {
         forward = "none"
       }
     }
+
+    min_ttl     = 3600
+    default_ttl = 86400
+    max_ttl     = 604800
+  }
+
+  ordered_cache_behavior {
+    path_pattern           = "*.js"
+    allowed_methods        = ["GET", "HEAD"]
+    cached_methods         = ["GET", "HEAD"]
+    target_origin_id       = "ec2-openresty-lua"
+    viewer_protocol_policy = "redirect-to-https"
+
+    forwarded_values {
+      query_string = false
+      cookies {
+        forward = "none"
+      }
+    }
+
+    min_ttl     = 3600
+    default_ttl = 86400
+    max_ttl     = 604800
   }
 
   restrictions {
@@ -146,7 +200,7 @@ resource "aws_acm_certificate_validation" "site" {
   validation_record_fqdns = [for record in aws_route53_record.cert_validation : record.fqdn]
 }
 
-# Route 53 A record pointing to CloudFront
+# Route 53 A record pointing to CloudFront (HTTPS)
 resource "aws_route53_record" "site_a" {
   zone_id = aws_route53_zone.primary.zone_id
   name    = "legoblox.me"
@@ -159,7 +213,7 @@ resource "aws_route53_record" "site_a" {
   }
 }
 
-# Route 53 AAAA record for IPv6
+# IPv6 record for CloudFront
 resource "aws_route53_record" "site_aaaa" {
   zone_id = aws_route53_zone.primary.zone_id
   name    = "legoblox.me"
@@ -172,7 +226,7 @@ resource "aws_route53_record" "site_aaaa" {
   }
 }
 
-# WWW subdomain redirect
+# WWW subdomain pointing to CloudFront (HTTPS)
 resource "aws_route53_record" "www_a" {
   zone_id = aws_route53_zone.primary.zone_id
   name    = "www.legoblox.me"
@@ -185,6 +239,7 @@ resource "aws_route53_record" "www_a" {
   }
 }
 
+# WWW IPv6 record for CloudFront
 resource "aws_route53_record" "www_aaaa" {
   zone_id = aws_route53_zone.primary.zone_id
   name    = "www.legoblox.me"
@@ -241,4 +296,234 @@ output "route53_name_servers" {
 
 output "certificate_arn" {
   value = aws_acm_certificate.site.arn
+}
+
+# =====================
+# OpenResty (Nginx + Lua) EC2 Server
+# =====================
+
+# VPC - Use default VPC for simplicity
+data "aws_vpc" "default" {
+  default = true
+}
+
+data "aws_subnets" "default" {
+  filter {
+    name   = "vpc-id"
+    values = [data.aws_vpc.default.id]
+  }
+}
+
+# Security Group for OpenResty
+resource "aws_security_group" "openresty" {
+  name        = "openresty-lua-server"
+  description = "Security group for OpenResty Lua web server"
+  vpc_id      = data.aws_vpc.default.id
+
+  # SSH access
+  ingress {
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+    description = "SSH access"
+  }
+
+  # HTTP access
+  ingress {
+    from_port   = 80
+    to_port     = 80
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+    description = "HTTP access"
+  }
+
+  # HTTPS access
+  ingress {
+    from_port   = 443
+    to_port     = 443
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+    description = "HTTPS access"
+  }
+
+  # All outbound traffic
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  tags = {
+    Name = "openresty-lua-server"
+  }
+}
+
+# Get latest Amazon Linux 2023 AMI
+data "aws_ami" "amazon_linux_2023" {
+  most_recent = true
+  owners      = ["amazon"]
+
+  filter {
+    name   = "name"
+    values = ["al2023-ami-*-x86_64"]
+  }
+
+  filter {
+    name   = "virtualization-type"
+    values = ["hvm"]
+  }
+}
+
+# EC2 Key Pair - You'll need to create this or use an existing one
+resource "aws_key_pair" "openresty" {
+  key_name   = "openresty-lua-key"
+  public_key = file("~/.ssh/id_rsa.pub")
+}
+
+# EC2 Instance with OpenResty
+resource "aws_instance" "openresty" {
+  ami                         = data.aws_ami.amazon_linux_2023.id
+  instance_type               = "t3.micro"  # Free tier eligible in this account
+  key_name                    = aws_key_pair.openresty.key_name
+  vpc_security_group_ids      = [aws_security_group.openresty.id]
+  subnet_id                   = tolist(data.aws_subnets.default.ids)[0]
+  associate_public_ip_address = true
+
+  user_data = <<-EOF
+              #!/bin/bash
+              set -e
+              
+              # Update system
+              dnf update -y
+              
+              # Install dependencies
+              dnf install -y gcc make pcre-devel openssl-devel zlib-devel wget tar
+              
+              # Download and install OpenResty
+              cd /tmp
+              wget https://openresty.org/download/openresty-1.25.3.1.tar.gz
+              tar -xzf openresty-1.25.3.1.tar.gz
+              cd openresty-1.25.3.1
+              
+              ./configure --prefix=/opt/openresty \
+                          --with-pcre-jit \
+                          --with-http_ssl_module \
+                          --with-http_v2_module
+              
+              make -j$(nproc)
+              make install
+              
+              # Add OpenResty to PATH
+              echo 'export PATH=/opt/openresty/bin:/opt/openresty/nginx/sbin:$PATH' >> /etc/profile.d/openresty.sh
+              source /etc/profile.d/openresty.sh
+              
+              # Create directories
+              mkdir -p /opt/openresty/nginx/lua
+              mkdir -p /opt/openresty/nginx/html
+              
+              # Create placeholder index.html (will be replaced by deploy script)
+              echo '<html><body><h1>OpenResty Ready - Deploy your Lua app!</h1></body></html>' > /opt/openresty/nginx/html/index.html
+              
+              # Create minimal nginx config (will be replaced by deploy script)
+              cat > /opt/openresty/nginx/conf/nginx.conf << 'NGINXEOF'
+              worker_processes auto;
+              error_log logs/error.log;
+              events { worker_connections 1024; }
+              http {
+                  include mime.types;
+                  default_type application/octet-stream;
+                  sendfile on;
+                  keepalive_timeout 65;
+                  lua_package_path "/opt/openresty/nginx/lua/?.lua;;";
+                  server {
+                      listen 80;
+                      server_name _;
+                      root /opt/openresty/nginx/html;
+                      index index.html;
+                      location / { try_files $uri $uri/ /index.html; }
+                  }
+              }
+              NGINXEOF
+              
+              # Create placeholder Lua app (will be replaced by deploy script)
+              cat > /opt/openresty/nginx/lua/app.lua << 'LUAEOF'
+              local _M = {}
+              function _M.api()
+                  ngx.header.content_type = "application/json"
+                  ngx.say('{"status":"ready","message":"Deploy your Lua app using deploy.ps1"}')
+              end
+              return _M
+              LUAEOF
+              
+              # Create systemd service
+              cat > /etc/systemd/system/openresty.service << 'SERVICEEOF'
+              [Unit]
+              Description=OpenResty - Lua Web Platform
+              After=network.target
+              
+              [Service]
+              Type=forking
+              PIDFile=/opt/openresty/nginx/logs/nginx.pid
+              ExecStartPre=/opt/openresty/nginx/sbin/nginx -t
+              ExecStart=/opt/openresty/nginx/sbin/nginx
+              ExecReload=/bin/kill -s HUP $MAINPID
+              ExecStop=/bin/kill -s QUIT $MAINPID
+              PrivateTmp=true
+              
+              [Install]
+              WantedBy=multi-user.target
+              SERVICEEOF
+              
+              # Start OpenResty
+              systemctl daemon-reload
+              systemctl enable openresty
+              systemctl start openresty
+              
+              echo "OpenResty installation complete! Deploy your Lua app using deploy.ps1"
+              EOF
+
+  tags = {
+    Name = "openresty-lua-server"
+  }
+
+  root_block_device {
+    volume_size = 30
+    volume_type = "gp3"
+  }
+}
+
+# Elastic IP for stable public address
+resource "aws_eip" "openresty" {
+  instance = aws_instance.openresty.id
+  domain   = "vpc"
+
+  tags = {
+    Name = "openresty-lua-server"
+  }
+}
+
+# DNS Record for Lua subdomain
+resource "aws_route53_record" "lua_a" {
+  zone_id = aws_route53_zone.primary.zone_id
+  name    = "lua.legoblox.me"
+  type    = "A"
+  ttl     = 300
+  records = [aws_eip.openresty.public_ip]
+}
+
+output "openresty_public_ip" {
+  value       = aws_eip.openresty.public_ip
+  description = "Public IP of the OpenResty Lua server"
+}
+
+output "openresty_ssh_command" {
+  value       = "ssh -i ~/.ssh/id_rsa ec2-user@${aws_eip.openresty.public_ip}"
+  description = "SSH command to connect to the server"
+}
+
+output "lua_website_url" {
+  value       = "http://lua.legoblox.me"
+  description = "URL of the Lua-powered website"
 }

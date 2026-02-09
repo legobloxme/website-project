@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>LegoBLOX - Stray Kids</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            width: 100vw;
+            height: 100vh;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            font-family: 'Arial', sans-serif;
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+        
+        .stars {
+            position: fixed;
+            width: 2px;
+            height: 2px;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle 3s infinite;
+        }
+        
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 1; }
+        }
+        
+        .container {
+            text-align: center;
+            z-index: 10;
+        }
+        
+        h1 {
+            font-size: 5rem;
+            font-weight: bold;
+            margin-bottom: 20px;
+            background: linear-gradient(90deg, #ff006e, #8338ec, #3a86ff, #06ffa5);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: 2px;
+            animation: glow 2s ease-in-out infinite;
+            text-shadow: 0 0 30px rgba(255, 0, 110, 0.5);
+        }
+        
+        @keyframes glow {
+            0%, 100% { 
+                filter: drop-shadow(0 0 10px #ff006e);
+            }
+            50% { 
+                filter: drop-shadow(0 0 20px #8338ec);
+            }
+        }
+        
+        .subtitle {
+            font-size: 1.8rem;
+            margin-bottom: 40px;
+            color: #06ffa5;
+            text-shadow: 0 0 10px #06ffa5;
+            animation: fadeInOut 3s infinite;
+        }
+        
+        @keyframes fadeInOut {
+            0%, 100% { opacity: 0.6; }
+            50% { opacity: 1; }
+        }
+        
+        .member-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 80px);
+            gap: 15px;
+            margin: 40px 0;
+            justify-content: center;
+        }
+        
+        .member {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #ff006e, #8338ec);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 0.7rem;
+            border: 3px solid #06ffa5;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 0 15px rgba(255, 0, 110, 0.5);
+        }
+        
+        .member:hover {
+            transform: scale(1.15);
+            box-shadow: 0 0 30px rgba(51, 56, 236, 0.8);
+            background: linear-gradient(135deg, #8338ec, #ff006e);
+        }
+        
+        .info {
+            margin-top: 50px;
+            font-size: 1.1rem;
+            color: #3a86ff;
+            text-shadow: 0 0 10px #3a86ff;
+            line-height: 1.8;
+        }
+        
+        .info p {
+            margin: 10px 0;
+        }
+        
+        .divider {
+            width: 200px;
+            height: 3px;
+            background: linear-gradient(90deg, #ff006e, #8338ec, #06ffa5);
+            margin: 30px auto;
+            border-radius: 2px;
+            box-shadow: 0 0 10px rgba(255, 0, 110, 0.5);
+        }
+        
+        .action-buttons {
+            margin-top: 40px;
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .btn {
+            padding: 12px 30px;
+            border: 2px solid #06ffa5;
+            background: transparent;
+            color: #06ffa5;
+            font-size: 1rem;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+            font-weight: bold;
+            text-shadow: 0 0 10px #06ffa5;
+            box-shadow: 0 0 10px rgba(6, 255, 165, 0.3);
+        }
+        
+        .btn:hover {
+            background: #06ffa5;
+            color: #1a1a2e;
+            box-shadow: 0 0 30px rgba(6, 255, 165, 0.8);
+            transform: scale(1.05);
+        }
+        
+        .btn-primary {
+            border-color: #ff006e;
+            color: #ff006e;
+            text-shadow: 0 0 10px #ff006e;
+            box-shadow: 0 0 10px rgba(255, 0, 110, 0.3);
+        }
+        
+        .btn-primary:hover {
+            background: #ff006e;
+            color: #fff;
+            box-shadow: 0 0 30px rgba(255, 0, 110, 0.8);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>STRAY KIDS</h1>
+        <p class="subtitle">SKZ - Your Local Man</p>
+        
+        <div class="member-grid">
+            <div class="member" title="Bang Chan">BC</div>
+            <div class="member" title="Lee Know">LK</div>
+            <div class="member" title="Changbin">CB</div>
+            <div class="member" title="Hyunjin">HJ</div>
+            <div class="member" title="Han">HN</div>
+            <div class="member" title="Felix">FX</div>
+            <div class="member" title="Seungmin">SM</div>
+            <div class="member" title="I.N">IN</div>
+        </div>
+        
+        <div class="divider"></div>
+        
+        <div class="info">
+            <p>8 talented members</p>
+            <p>One unstoppable group</p>
+            <p>STAY STRONG, STAY TOGETHER</p>
+        </div>
+        
+        <div class="action-buttons">
+            <button class="btn btn-primary">About Us</button>
+            <button class="btn">Music</button>
+            <button class="btn">Community</button>
+        </div>
+    </div>
+    
+    <script>
+        // Create twinkling stars
+        function createStars() {
+            const starCount = 50;
+            for (let i = 0; i < starCount; i++) {
+                const star = document.createElement('div');
+                star.className = 'stars';
+                star.style.left = Math.random() * 100 + '%';
+                star.style.top = Math.random() * 100 + '%';
+                star.style.animationDelay = Math.random() * 3 + 's';
+                document.body.appendChild(star);
+            }
+        }
+        
+        createStars();
+        
+        // Add animation to member circles on click
+        document.querySelectorAll('.member').forEach(member => {
+            member.addEventListener('click', function() {
+                this.style.animation = 'none';
+                setTimeout(() => {
+                    this.style.animation = '';
+                }, 10);
+            });
+        });
+    </script>
+</body>
+</html>

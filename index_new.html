@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>LegoBLOX - Skateboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: white;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            overflow-x: hidden;
+        }
+        
+        h1 {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            animation: bounce 2s infinite;
+        }
+        
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+        
+        .skateboard {
+            width: 300px;
+            height: 150px;
+            background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%);
+            border-radius: 50%;
+            margin: 40px 0;
+            position: relative;
+            animation: roll 3s linear infinite;
+            box-shadow: 0 20px 60px rgba(255, 107, 53, 0.4);
+        }
+        
+        @keyframes roll {
+            0% { transform: translateX(-100vw) rotateZ(0deg); }
+            100% { transform: translateX(100vw) rotateZ(360deg); }
+        }
+        
+        .skateboard::before {
+            content: '';
+            position: absolute;
+            width: 80%;
+            height: 60%;
+            background: linear-gradient(90deg, #ff8c42, #ff6b35);
+            top: 20%;
+            left: 10%;
+            border-radius: 30%;
+        }
+        
+        .skateboard::after {
+            content: '';
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            background: #333;
+            border-radius: 50%;
+            bottom: -10px;
+            right: 20px;
+            box-shadow: -180px 0 0 #333;
+        }
+        
+        .links {
+            margin-top: 60px;
+            display: flex;
+            gap: 20px;
+        }
+        
+        a {
+            background: #ff6b35;
+            color: white;
+            padding: 15px 30px;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+            transition: all 0.3s;
+            font-size: 1.1rem;
+        }
+        
+        a:hover {
+            background: #ff8c42;
+            transform: scale(1.05);
+        }
+        
+        .rick-link {
+            background: #e74c3c;
+        }
+        
+        .rick-link:hover {
+            background: #c0392b;
+        }
+    </style>
+</head>
+<body>
+    <h1>🛹 LegoBLOX 🛹</h1>
+    <div class="skateboard"></div>
+    <p style="font-size: 1.3rem; margin-bottom: 40px;">Shred it!</p>
+    
+    <div class="links">
+        <a href="/">Home</a>
+        <a class="rick-link" href="/rick">Rick Roll</a>
+    </div>
+</body>
+</html>

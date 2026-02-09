@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>LegoBLOX - Stray Kids</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            width: 100vw;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            font-family: 'Arial', sans-serif;
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            overflow-x: hidden;
+            padding: 20px;
+        }
+        
+        .stars {
+            position: fixed;
+            width: 2px;
+            height: 2px;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle 3s infinite;
+        }
+        
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 1; }
+        }
+        
+        .container {
+            text-align: center;
+            z-index: 10;
+            max-width: 1000px;
+        }
+        
+        h1 {
+            font-size: 5rem;
+            font-weight: bold;
+            margin-bottom: 20px;
+            background: linear-gradient(90deg, #ff006e, #8338ec, #3a86ff, #06ffa5);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: 2px;
+            animation: glow 2s ease-in-out infinite;
+            text-shadow: 0 0 30px rgba(255, 0, 110, 0.5);
+        }
+        
+        @keyframes glow {
+            0%, 100% { 
+                filter: drop-shadow(0 0 10px #ff006e);
+            }
+            50% { 
+                filter: drop-shadow(0 0 20px #8338ec);
+            }
+        }
+        
+        .subtitle {
+            font-size: 1.8rem;
+            margin-bottom: 40px;
+            color: #06ffa5;
+            text-shadow: 0 0 10px #06ffa5;
+            animation: fadeInOut 3s infinite;
+        }
+        
+        @keyframes fadeInOut {
+            0%, 100% { opacity: 0.6; }
+            50% { opacity: 1; }
+        }
+        
+        .member-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 80px);
+            gap: 15px;
+            margin: 40px 0;
+            justify-content: center;
+        }
+        
+        .member {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #ff006e, #8338ec);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 0.7rem;
+            border: 3px solid #06ffa5;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 0 15px rgba(255, 0, 110, 0.5);
+        }
+        
+        .member:hover {
+            transform: scale(1.15);
+            box-shadow: 0 0 30px rgba(51, 56, 236, 0.8);
+            background: linear-gradient(135deg, #8338ec, #ff006e);
+        }
+        
+        .divider {
+            width: 200px;
+            height: 3px;
+            background: linear-gradient(90deg, #ff006e, #8338ec, #06ffa5);
+            margin: 30px auto;
+            border-radius: 2px;
+            box-shadow: 0 0 10px rgba(255, 0, 110, 0.5);
+        }
+        
+        .info {
+            margin-top: 50px;
+            font-size: 1.1rem;
+            color: #3a86ff;
+            text-shadow: 0 0 10px #3a86ff;
+            line-height: 1.8;
+        }
+        
+        .info p {
+            margin: 10px 0;
+        }
+        
+        .action-buttons {
+            margin-top: 40px;
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .btn {
+            padding: 12px 30px;
+            border: 2px solid #06ffa5;
+            background: transparent;
+            color: #06ffa5;
+            font-size: 1rem;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+            font-weight: bold;
+            text-shadow: 0 0 10px #06ffa5;
+            box-shadow: 0 0 10px rgba(6, 255, 165, 0.3);
+        }
+        
+        .btn:hover {
+            background: #06ffa5;
+            color: #1a1a2e;
+            box-shadow: 0 0 30px rgba(6, 255, 165, 0.8);
+            transform: scale(1.05);
+        }
+        
+        .btn-primary {
+            border-color: #ff006e;
+            color: #ff006e;
+            text-shadow: 0 0 10px #ff006e;
+            box-shadow: 0 0 10px rgba(255, 0, 110, 0.3);
+        }
+        
+        .btn-primary:hover {
+            background: #ff006e;
+            color: #fff;
+            box-shadow: 0 0 30px rgba(255, 0, 110, 0.8);
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            animation: fadeIn 0.3s;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .modal-content {
+            background: linear-gradient(135deg, #16213e, #0f3460);
+            margin: 5% auto;
+            padding: 30px;
+            border: 2px solid #06ffa5;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 600px;
+            box-shadow: 0 0 30px rgba(6, 255, 165, 0.5);
+            animation: slideIn 0.3s;
+        }
+        
+        @keyframes slideIn {
+            from {
+                transform: translateY(-50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+        
+        .close {
+            color: #06ffa5;
+            float: right;
+            font-size: 2rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .close:hover {
+            color: #ff006e;
+        }
+        
+        .modal h2 {
+            color: #06ffa5;
+            margin-bottom: 20px;
+            text-shadow: 0 0 10px #06ffa5;
+        }
+        
+        .modal p {
+            margin: 15px 0;
+            line-height: 1.6;
+        }
+        
+        .member-info {
+            background: rgba(255, 0, 110, 0.1);
+            padding: 15px;
+            border-left: 3px solid #ff006e;
+            margin: 15px 0;
+            text-align: left;
+        }
+        
+        .member-info strong {
+            color: #ff006e;
+        }
+        
+        .music-item {
+            background: rgba(51, 56, 236, 0.1);
+            padding: 15px;
+            margin: 10px 0;
+            border-left: 3px solid #3a86ff;
+            text-align: left;
+        }
+        
+        .music-item strong {
+            color: #3a86ff;
+        }
+        
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>STRAY KIDS</h1>
+        <p class="subtitle">SKZ - Your Local Man</p>
+        
+        <div class="member-grid">
+            <div class="member" onclick="showMemberInfo('Bang Chan')">BC</div>
+            <div class="member" onclick="showMemberInfo('Lee Know')">LK</div>
+            <div class="member" onclick="showMemberInfo('Changbin')">CB</div>
+            <div class="member" onclick="showMemberInfo('Hyunjin')">HJ</div>
+            <div class="member" onclick="showMemberInfo('Han')">HN</div>
+            <div class="member" onclick="showMemberInfo('Felix')">FX</div>
+            <div class="member" onclick="showMemberInfo('Seungmin')">SM</div>
+            <div class="member" onclick="showMemberInfo('I.N')">IN</div>
+        </div>
+        
+        <div class="divider"></div>
+        
+        <div class="info">
+            <p>8 talented members</p>
+            <p>One unstoppable group</p>
+            <p>STAY STRONG, STAY TOGETHER</p>
+        </div>
+        
+        <div class="action-buttons">
+            <button class="btn btn-primary" onclick="showAbout()">About Us</button>
+            <button class="btn" onclick="showMusic()">Music</button>
+            <button class="btn" onclick="showCommunity()">Community</button>
+        </div>
+    </div>
+    
+    <!-- Modal -->
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <div id="modal-body"></div>
+        </div>
+    </div>
+    
+    <script>
+        // Create twinkling stars
+        function createStars() {
+            const starCount = 50;
+            for (let i = 0; i < starCount; i++) {
+                const star = document.createElement('div');
+                star.className = 'stars';
+                star.style.left = Math.random() * 100 + '%';
+                star.style.top = Math.random() * 100 + '%';
+                star.style.animationDelay = Math.random() * 3 + 's';
+                document.body.appendChild(star);
+            }
+        }
+        
+        createStars();
+        
+        const modal = document.getElementById('modal');
+        const modalBody = document.getElementById('modal-body');
+        
+        function openModal() {
+            modal.style.display = 'block';
+        }
+        
+        function closeModal() {
+            modal.style.display = 'none';
+        }
+        
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                modal.style.display = 'none';
+            }
+        }
+        
+        function showAbout() {
+            modalBody.innerHTML = `
+                <h2>About Stray Kids</h2>
+                <p>Stray Kids is a South Korean boy group formed by JYP Entertainment. The group consists of 8 talented members who have captured the hearts of millions worldwide.</p>
+                <p><strong>Debut:</strong> March 25, 2018</p>
+                <p><strong>Company:</strong> JYP Entertainment / REPUBLIC RECORDS</p>
+                <p><strong>Fandom Name:</strong> STAY</p>
+                <p>Known for their energetic performances, creative music production, and strong connection with their global fanbase, Stray Kids continues to break records and push boundaries in the K-pop industry.</p>
+            `;
+            openModal();
+        }
+        
+        function showMusic() {
+            modalBody.innerHTML = `
+                <h2>Popular Songs</h2>
+                <div class="music-item">
+                    <strong>God's Menu</strong><br>
+                    One of their biggest hits with an addictive choreography and catchy beat.
+                </div>
+                <div class="music-item">
+                    <strong>Back Door</strong><br>
+                    A hip-hop influenced track that showcases their versatility as artists.
+                </div>
+                <div class="music-item">
+                    <strong>S-Class</strong><br>
+                    A powerful anthem celebrating their achievements and growth.
+                </div>
+                <div class="music-item">
+                    <strong>특(S-Class)</strong><br>
+                    Another iconic track from their album collection.
+                </div>
+                <p style="margin-top: 20px; color: #06ffa5;">Discover more on streaming platforms like Spotify, Apple Music, and YouTube!</p>
+            `;
+            openModal();
+        }
+        
+        function showCommunity() {
+            modalBody.innerHTML = `
+                <h2>Join the STAY Community</h2>
+                <p>Stray Kids has one of the most active and supportive fanbases in the world!</p>
+                <div class="music-item">
+                    <strong>Official Fandom Name:</strong> STAY
+                </div>
+                <div class="music-item">
+                    <strong>Official Colors:</strong> Gold and Black
+                </div>
+                <div class="music-item">
+                    <strong>Lightstick:</strong> STAY Official Lightstick
+                </div>
+                <p style="margin-top: 20px;">Connect with other STAY members on:</p>
+                <ul style="text-align: left; margin: 15px 0; color: #3a86ff;">
+                    <li>Instagram: @realstraykids</li>
+                    <li>Twitter/X: @Stray_Kids</li>
+                    <li>TikTok: @realstraykids</li>
+                    <li>YouTube: Stray Kids Official</li>
+                </ul>
+                <p style="margin-top: 20px; color: #ff006e; font-weight: bold;">Let's stay together! #StayStrong</p>
+            `;
+            openModal();
+        }
+        
+        function showMemberInfo(memberName) {
+            const memberData = {
+                'Bang Chan': {
+                    real: 'Christopher Bang',
+                    role: 'Leader, Vocalist, Producer',
+                    born: 'October 3, 1997',
+                    bio: 'Australian-Korean leader of Stray Kids, known for his leadership, vocal abilities, and producing talent.'
+                },
+                'Lee Know': {
+                    real: 'Lee Minho',
+                    role: 'Dancer, Sub-Vocalist',
+                    born: 'October 25, 1998',
+                    bio: 'Known as one of the best dancers in K-pop with a calm and cool personality.'
+                },
+                'Changbin': {
+                    real: 'Seo Changbin',
+                    role: 'Rapper, Vocalist',
+                    born: 'August 11, 1999',
+                    bio: 'Known for his deep voice and producing ability, creates many songs for the group.'
+                },
+                'Hyunjin': {
+                    real: 'hwang hyunjin',
+                    role: 'Dancer, Sub-Vocalist',
+                    born: 'March 20, 2000',
+                    bio: 'Known for his beautiful visuals and exceptional dancing skills.'
+                },
+                'Han': {
+                    real: 'Han Jisung',
+                    role: 'Rapper, Vocalist',
+                    born: 'September 14, 2000',
+                    bio: 'A talented producer and songwriter, known for his bright personality.'
+                },
+                'Felix': {
+                    real: 'Yong Bok',
+                    role: 'Dancer, Sub-Vocalist',
+                    born: 'April 30, 2001',
+                    bio: 'Australian member with a deep voice and incredible dancing abilities.'
+                },
+                'Seungmin': {
+                    real: 'Kim Seung-min',
+                    role: 'Vocalist',
+                    born: 'September 22, 2002',
+                    bio: 'Known for his beautiful vocals and sweet personality.'
+                },
+                'I.N': {
+                    real: 'Yang Jeong-in',
+                    role: 'Vocalist',
+                    born: 'February 8, 2003',
+                    bio: 'The youngest member with incredible vocal talent and charming charisma.'
+                }
+            };
+            
+            const member = memberData[memberName];
+            if (member) {
+                modalBody.innerHTML = `
+                    <h2>${memberName}</h2>
+                    <div class="member-info">
+                        <strong>Real Name:</strong> ${member.real}
+                    </div>
+                    <div class="member-info">
+                        <strong>Role:</strong> ${member.role}
+                    </div>
+                    <div class="member-info">
+                        <strong>Birthdate:</strong> ${member.born}
+                    </div>
+                    <p style="margin-top: 20px;">${member.bio}</p>
+                `;
+                openModal();
+            }
+        }
+    </script>
+</body>
+</html>

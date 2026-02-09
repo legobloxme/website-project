@@ -1,0 +1,75 @@
+﻿[0m[1mdata.aws_ami.amazon_linux_2023: Reading...[0m[0m
+[0m[1maws_route53_zone.primary: Refreshing state... [id=Z07836082R51FAZSHUW3V][0m
+[0m[1maws_key_pair.openresty: Refreshing state... [id=openresty-lua-key][0m
+[0m[1maws_cloudfront_origin_access_control.site: Refreshing state... [id=E78GAFL05NQ8P][0m
+[0m[1mdata.aws_vpc.default: Reading...[0m[0m
+[0m[1maws_s3_bucket.site: Refreshing state... [id=legoblox.me-website][0m
+[0m[1mdata.aws_vpc.default: Read complete after 0s [id=vpc-0933ac72c316fb5f8][0m
+[0m[1mdata.aws_subnets.default: Reading...[0m[0m
+[0m[1maws_security_group.openresty: Refreshing state... [id=sg-0776ed1c9c851fc21][0m
+[0m[1mdata.aws_ami.amazon_linux_2023: Read complete after 0s [id=ami-0ee0a354dd00487cd][0m
+[0m[1maws_s3_bucket_public_access_block.site: Refreshing state... [id=legoblox.me-website][0m
+[0m[1mdata.aws_subnets.default: Read complete after 0s [id=ap-southeast-2][0m
+[0m[1maws_instance.openresty: Refreshing state... [id=i-05200ae20bd774faa][0m
+[0m[1maws_acm_certificate.site: Refreshing state... [id=arn:aws:acm:us-east-1:125788629640:certificate/53a1e3f0-932b-4c3f-aab0-becf8edc3395][0m
+[0m[1maws_route53_record.icloud_dkim: Refreshing state... [id=Z07836082R51FAZSHUW3V_sig1._domainkey.legoblox.me_CNAME][0m
+[0m[1maws_route53_record.icloud_spf: Refreshing state... [id=Z07836082R51FAZSHUW3V_legoblox.me_TXT][0m
+[0m[1maws_route53_record.icloud_mx: Refreshing state... [id=Z07836082R51FAZSHUW3V_legoblox.me_MX][0m
+[0m[1maws_route53_record.cert_validation["legoblox.me"]: Refreshing state... [id=Z07836082R51FAZSHUW3V__7a9fef901f590b8819341ef82e1c13d3.legoblox.me._CNAME][0m
+[0m[1maws_route53_record.cert_validation["*.legoblox.me"]: Refreshing state... [id=Z07836082R51FAZSHUW3V__7a9fef901f590b8819341ef82e1c13d3.legoblox.me._CNAME][0m
+[0m[1maws_eip.openresty: Refreshing state... [id=eipalloc-00fbdda8c00eee394][0m
+[0m[1maws_route53_record.lua_a: Refreshing state... [id=Z07836082R51FAZSHUW3V_lua.legoblox.me_A][0m
+[0m[1maws_acm_certificate_validation.site: Refreshing state... [id=2026-02-01 10:08:22.26 +0000 UTC][0m
+[0m[1maws_cloudfront_distribution.site: Refreshing state... [id=E1MPJ32WRIL27Q][0m
+[0m[1maws_route53_record.www_a: Refreshing state... [id=Z07836082R51FAZSHUW3V_www.legoblox.me_A][0m
+[0m[1maws_route53_record.www_aaaa: Refreshing state... [id=Z07836082R51FAZSHUW3V_www.legoblox.me_AAAA][0m
+[0m[1maws_route53_record.site_aaaa: Refreshing state... [id=Z07836082R51FAZSHUW3V_legoblox.me_AAAA][0m
+[0m[1mdata.aws_iam_policy_document.site: Reading...[0m[0m
+[0m[1maws_route53_record.site_a: Refreshing state... [id=Z07836082R51FAZSHUW3V_legoblox.me_A][0m
+[0m[1mdata.aws_iam_policy_document.site: Read complete after 0s [id=2289802870][0m
+[0m[1maws_s3_bucket_policy.site: Refreshing state... [id=legoblox.me-website][0m
+
+Terraform used the selected providers to generate the following execution
+plan. Resource actions are indicated with the following symbols:
+  [33m~[0m update in-place[0m
+
+Terraform will perform the following actions:
+
+[1m  # aws_instance.openresty[0m will be updated in-place
+[0m  [33m~[0m[0m resource "aws_instance" "openresty" {
+        id                                   = "i-05200ae20bd774faa"
+      [33m~[0m[0m instance_type                        = "t3.micro" [33m->[0m[0m "t2.micro"
+      [33m~[0m[0m public_dns                           = "ec2-54-206-174-232.ap-southeast-2.compute.amazonaws.com" -> (known after apply)
+      [33m~[0m[0m public_ip                            = "54.206.174.232" -> (known after apply)
+        tags                                 = {
+            "Name" = "openresty-lua-server"
+        }
+        [90m# (37 unchanged attributes hidden)[0m[0m
+
+        [90m# (8 unchanged blocks hidden)[0m[0m
+    }
+
+[1mPlan:[0m [0m0 to add, 1 to change, 0 to destroy.
+[0m[1maws_instance.openresty: Modifying... [id=i-05200ae20bd774faa][0m[0m
+[0m[1maws_instance.openresty: Still modifying... [id=i-05200ae20bd774faa, 00m10s elapsed][0m[0m
+terraform : [31mΓò╖[0m[0m
+At line:1 char:1
++ terraform apply -auto-approve 2>&1 | Out-File -FilePath tf_freetier2. ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ([31mΓò╖[0m[0m:String) [], Remo 
+   teException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+[31mΓöé[0m [0m[1m[31mError: [0m[0m[1mupdating EC2 Instance 
+(i-05200ae20bd774faa) type: modifying EC2 Instance (i-05200ae20bd774faa) 
+InstanceType (t2.micro) attribute: operation error EC2: 
+ModifyInstanceAttribute, https response error StatusCode: 400, RequestID: 
+5bfe4682-358a-48e0-89bc-dce3e167695d, api error FreeTierRestrictionError: This 
+operation is not available for free plan accounts. To perform this action, 
+please upgrade your account plan.[0m
+[31mΓöé[0m [0m
+[31mΓöé[0m [0m[0m  with aws_instance.openresty,
+[31mΓöé[0m [0m  on main.tf line 331, in resource "aws_instance" "openresty":
+[31mΓöé[0m [0m 331: resource "aws_instance" "openresty" [4m{[0m[0m
+[31mΓöé[0m [0m
+[31mΓò╡[0m[0m
